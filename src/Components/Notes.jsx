@@ -3,6 +3,7 @@ import noteContext from "../context/notes/noteContext";
 import Noteitem from "./Noteitem";
 import AddNote from "./AddNote";
 import { useNavigate } from "react-router-dom";
+import { Modal } from "bootstrap";
 
 const Notes = () => {
   const navigate = useNavigate();
@@ -28,13 +29,22 @@ const Notes = () => {
   }, []);
 
   const updateNote = (currentNote) => {
-    ref.current.click();
+    console.log("clicked");
     setNote({
       id: currentNote._id,
       etitle: currentNote.title,
       edescription: currentNote.description,
       etag: currentNote.tag,
     });
+    setTimeout(() => {
+      const modalElement = document.getElementById("editNoteModal");
+      if (modalElement) {
+        const modalInstance = new Modal(modalElement);
+        modalInstance.show();
+      } else {
+        console.error("Modal element not found");
+      }
+    }, 100);
   };
 
   const handleClick = async () => {
@@ -162,8 +172,8 @@ const Notes = () => {
           {notes.length === 0 && (
             <p className="text-muted">Please Add your Tasks.</p>
           )}
-          {notes.map((note, index) => (
-            <div className="col-md-3 mb-2" key={index}>
+          {notes.map((note) => (
+            <div className="col-md-3 mb-2" key={note._id}>
               <Noteitem key={note._id} updateNote={updateNote} note={note} />
             </div>
           ))}
